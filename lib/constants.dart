@@ -1,29 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart%20';
+import 'package:flutter/widgets.dart';
 
 const kSendButtonTextStyle = TextStyle(
   color: Colors.lightBlueAccent,
   fontWeight: FontWeight.bold,
   fontSize: 18.0,
 );
-const temp =  InputDecoration(
-                hintText: 'Enter your password.',
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 1.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide:
-                      BorderSide(color: Colors.lightBlueAccent, width: 2.0),
-                  borderRadius: BorderRadius.all(Radius.circular(32.0)),
-                ),
-              );
 const kMessageTextFieldDecoration = InputDecoration(
   hintText: 'Type your message here...',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0,horizontal: 20.0),
@@ -31,8 +14,12 @@ const kMessageTextFieldDecoration = InputDecoration(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
   ),
   enabledBorder:OutlineInputBorder(
-    borderSide:BorderSide(color:Colors.blue,width: 10),
+    borderSide:BorderSide(color:Color.fromARGB(255, 166, 243, 33),width: 1),
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
+  ),
+  focusedBorder: OutlineInputBorder(
+    borderRadius: BorderRadius.all(Radius.circular(32.0)),
+    borderSide: BorderSide(color: Color.fromARGB(255, 243, 33, 138),width: 2),
   )
 
 );
