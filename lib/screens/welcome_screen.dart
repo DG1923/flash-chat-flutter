@@ -5,6 +5,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'button_screen.dart';
 class WelcomeScreen extends StatefulWidget {
   static const String id = 'welcome_screen';
+
+  const WelcomeScreen({super.key});
   @override
   _WelcomeScreenState createState() => _WelcomeScreenState();
 }
@@ -17,7 +19,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     // TODO: implement initState
     super.initState();
     control = AnimationController(
-      duration: Duration(seconds: 1),
+      duration: const Duration(seconds: 1),
       vsync: this);
     animation = CurvedAnimation(
       parent: control,
@@ -45,7 +47,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
     return Scaffold(
       backgroundColor: animationColor.value,
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -54,16 +56,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
               children: <Widget>[
                 Hero(
                   tag: 'logo',
-                  child: Container(
-                    child: Image.asset('images/logo.png'),
+                  child: SizedBox(
                     height: 60.0*animation.value,
+                    child: Image.asset('images/logo.png'),
                   ),
                 ),
                 AnimatedTextKit(
                   animatedTexts: [
                     TypewriterAnimatedText("Flash Chat",
                     speed: const Duration(milliseconds: 500),
-                    textStyle: TextStyle(
+                    textStyle: const TextStyle(
                     fontSize: 45.0,
                     fontWeight: FontWeight.w900,
                     ),
@@ -72,7 +74,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> with TickerProviderStateM
                 ),
               ],
             ),
-            SizedBox(
+            const SizedBox(
               height: 48.0,
             ),
             ButtonScreen(
