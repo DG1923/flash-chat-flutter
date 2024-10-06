@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,11 +16,12 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
+late User user;
+
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _chat = TextEditingController();
   FirebaseFirestore _store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
-  late User user;
   void getCurrentUser() {
     user = auth.currentUser!;
     print(user.email);
@@ -49,9 +51,8 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: const Icon(Icons.close),
               onPressed: () async {
                 //Implement logout functionality
-                getMessages();
-                // await auth.signOut();
-                // Navigator.popAndPushNamed(context, WelcomeScreen.id);
+                await auth.signOut();
+                Navigator.popAndPushNamed(context, WelcomeScreen.id);
               }),
         ],
         title: const Text('⚡️Chat'),
@@ -71,8 +72,10 @@ class _ChatScreenState extends State<ChatScreen> {
                   for (var message in messages) {
                     final messageText = message.get("text");
                     final messageSender = message.get("sender");
-                    final messageWidget =
-                        MessageBubble(text: messageText, sender: messageSender);
+                    final messageWidget = MessageBubble(
+                        text: messageText,
+                        sender: messageSender,
+                        isMe: user.email == messageSender);
                     messageWidgets.add(messageWidget);
                   }
                   return Expanded(
@@ -92,15 +95,11 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: _chat,
-                      onChanged: (value) {
-                        //Do something with the user input.
-                      },
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
                   ElevatedButton(
                     onPressed: () {
-
                       print("${_chat.text} va email : ${user.email}");
                       _store.collection("messages").add({
                         "text": _chat.text,
@@ -126,35 +125,63 @@ class _ChatScreenState extends State<ChatScreen> {
 
 class MessageBubble extends StatelessWidget {
   String text;
+  bool isMe;
   String sender;
-  MessageBubble({super.key, required this.text, required this.sender});
+  MessageBubble(
+      {super.key,
+      required this.text,
+      required this.sender,
+      required this.isMe});
+  Widget chatWidget() {
+    BorderRadius borderRadius = BorderRadius.only(
+        topLeft: Radius.circular(30),
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
+        topRight: Radius.circular(1));
+    Color colorBackground = Colors.lightBlueAccent;
+    Color colorText = Colors.white;
+    CrossAxisAlignment  crossAxisAlignment = CrossAxisAlignment.end;
+    if (!isMe) {
+      borderRadius = BorderRadius.only(
+        topLeft: Radius.circular(1),
+        topRight: Radius.circular(30),
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
+      );
+      colorBackground = Colors.white;
+      colorText = Colors.black45;
+      crossAxisAlignment = CrossAxisAlignment.start;
+    }
+
+    return Column(
+        crossAxisAlignment: crossAxisAlignment,
+        children: [
+      Text(sender,
+          style: TextStyle(
+            fontSize: 10,
+          )),
+      Material(
+        elevation: 5,
+        borderRadius: borderRadius,
+        color: colorBackground,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+          child: Text(
+            "${this.text}",
+            style: TextStyle(
+              fontSize: 18,
+              color: colorText,
+            ),
+          ),
+        ),
+      ),
+    ]);
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.end,
-        children: [
-          Text(sender),
-          Material(
-            elevation: 5,
-            borderRadius: BorderRadius.circular(32),
-            color: Colors.lightBlueAccent,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              child: Text(
-                "${this.text}",
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-
-        ]
-      ),
-    );
+      child: chatWidget(),);
   }
 }
