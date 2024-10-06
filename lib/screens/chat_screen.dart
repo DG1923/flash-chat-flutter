@@ -22,6 +22,7 @@ class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _chat = TextEditingController();
   FirebaseFirestore _store = FirebaseFirestore.instance;
   FirebaseAuth auth = FirebaseAuth.instance;
+
   void getCurrentUser() {
     user = auth.currentUser!;
     print(user.email);
@@ -64,11 +65,12 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             StreamBuilder<QuerySnapshot>(
-              stream: _store.collection('messages').snapshots(),
+              stream: _store.collection('messages').orderBy('timestamp',descending: false).snapshots(),
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   final messages = snapshot.data!.docs;
                   List<Widget> messageWidgets = [];
+
                   for (var message in messages) {
                     final messageText = message.get("text");
                     final messageSender = message.get("sender");
@@ -104,6 +106,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       _store.collection("messages").add({
                         "text": _chat.text,
                         "sender": user.email,
+                        "timestamp": FieldValue.serverTimestamp(),
                       });
                       _chat.clear();
                       //Implement send functionality.

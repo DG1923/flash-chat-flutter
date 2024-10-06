@@ -88,6 +88,9 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       } on FirebaseAuthException catch(e){
                         print("Firebase Exception : ${e.code}");
+                        setState(() {
+                          showSpiner = false;
+                        });
                         showCupertinoDialog(context: context, builder: (BuildContext context){
                           return CupertinoAlertDialog(
                             title: Text("Notification"),
