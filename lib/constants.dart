@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/material.dart%20';
 
@@ -19,7 +20,7 @@ const kMessageTextFieldDecoration = InputDecoration(
   focusedBorder: OutlineInputBorder(
     borderRadius: BorderRadius.all(Radius.circular(32.0)),
     borderSide: BorderSide(color: Color.fromARGB(255, 243, 33, 138),width: 2),
-  )
+  ),
 
 );
 
